@@ -17,6 +17,7 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <pthread.h>
+#include <string.h>
 
 void sender();
 void receiver(int server_fd);
@@ -81,46 +82,66 @@ int main(int argc, char const *argv[]) {
 // Sender
 void sender() {
 
-    char buffer[2000] = {0};
+    // Get the ip's
+    char ips[10][15] = {""};
     char receiver_ip[15];
+    int add = 1;
+    int i = 0;
+    while ((add == 1) && (i <= 9)) {
+        printf("Press 1 for adding IP, press 2 to send: ");
+        scanf("%d", &add);
+        switch (add) {
+            case 1:
+                printf("Receiver IP: ");
+                scanf("%s", receiver_ip);
+                strcpy(ips[i], receiver_ip);
+                i++;
+                break;
+            case 2:
+                break;
+            default:
+                break;
+        }
+    }
 
-    // Request receiver's IP
-    printf("Receiver IP: ");
-    scanf("%s", receiver_ip);
-
-    // Socket
-    int sock = 0;
-    struct sockaddr_in serv_addr;
+    // Get the command
+    char buffer[2000] = {0};
     char hello[1024] = {0};
-    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0){
-        printf("\n Socket creation error \n");
-        return;
-    }
-
-    // Adress
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr(receiver_ip);
-    serv_addr.sin_addr.s_addr = inet_addr(receiver_ip);
-    serv_addr.sin_port = htons(6000);
-
-    // Connection
-    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-        printf("\nConnection Failed \n");
-        return;
-    }
-
     char dummy;
     printf("Command: ");
     scanf("%c", &dummy);
     scanf("%[^\n]s", hello);
-
-    // Buffer is storing our command
     sprintf(buffer, hello);
 
-    // Sends the data
-    send(sock, buffer, sizeof(buffer), 0);
-    printf("Command sent\n");
-    close(sock);
+    // Sends the data to the ip's
+    for (int j = 0; j < i; j++) {
+
+        // Socket
+        int sock = 0;
+        struct sockaddr_in serv_addr;
+        if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0){
+            printf("\n Socket creation error \n");
+            return;
+        }
+
+        // Adress
+        serv_addr.sin_family = AF_INET;
+        serv_addr.sin_addr.s_addr = inet_addr(ips[j]);
+        serv_addr.sin_port = htons(6000);
+
+        // Connection
+        if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+            printf("\nConnection Failed \n");
+            return;
+        }
+
+        // Sends the data
+        send(sock, buffer, sizeof(buffer), 0);
+        printf("Command sent\n");
+        close(sock);
+
+    }
+
 }
 
 // Calling receiver every 2 seconds

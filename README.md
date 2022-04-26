@@ -1,19 +1,19 @@
 ## P2P Network
- 
+
 Implementação de uma rede p2p, para o Trabalho do Grau A, na cadeira de Redes de Computadores I.
 
 Basicamente, o sistema cria 2 threads, para o sender e receiver dos dados.
- 
+
 Cada peer vai rodar o mesmo programa. Os peers são executados em containers.
- 
- 
+
+
 ## System
 
 O sistema foi desenvolvimento em C, o ambiente foi um Linux Mint bare-metal, os peers rodam em containers Docker e o Vim foi utilizado como editor de texto.
 
 
 ## Getting started
- 
+
 ### Instalar e rodar o Docker:
 
 Vamos instalar o Docker no sistema e subir 3 containers rodando Ubuntu
@@ -41,27 +41,25 @@ Vamos instalar o Docker no sistema e subir 3 containers rodando Ubuntu
 
 Vamos compilar o programa com o GCC e rodar
 
-1. ```gcc -o main main.c```
+1. ```gcc -pthread -o main main.c```
 
 2. ```./main```
 
 
 ### Usage
 
-1. O sistema irá iniciar ouvindo para a chegada de pacotes 
+1. O sistema irá iniciar ouvindo para a chegada de pacotes
 2. Usuário indica que deseja enviar um comando para os peers
-3. Usuário informa o IP do receiver
+3. Usuário informa os IP's dos peers da rede
 4. Usuário digita o comando e o sistema envia para os peers
 5. Os peers recebebem os dados e executam o comando no seu sistema
 
 
 ## Versioning
- 
+
 1.0.0
 
 
 ## Authors
- 
+
 * **LUCAS SCHNEIDER**: @1lusca (https://github.com/1lusca)
- 
- 
